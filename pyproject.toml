@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "postal"
+version = "0.1.0"
+description = ""
+authors = ["Ostoic <ostoic@uwindsor.ca>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.26.0"
+trio = "^0.19.0"
+pysocks = "*"
+loguru = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = {version="*", optional=true}
+pytest-trio = {version="*", optional=true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
