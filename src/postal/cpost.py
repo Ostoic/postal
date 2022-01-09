@@ -2,7 +2,7 @@ import trio
 import requests
 import functools
 from datetime import datetime, date, timezone, timedelta
-from typing import Union, List
+from typing import List, Optional
 
 from loguru import logger
 
@@ -34,7 +34,7 @@ class CPostEvent:
         return self._data['descEn']
 
     @property
-    def address(self) -> Union[str | None]:
+    def address(self) -> Optional[str]:
         loc = self._data['locationAddr']
         if loc['city'] == '' or loc['regionCd'] == '':
             return None
@@ -46,12 +46,12 @@ class CPostEvent:
         return self._data['type']
 
     @property
-    def retail_name(self) -> Union[str | None]:
+    def retail_name(self) -> Optional[str]:
         if 'retailNmEn' in self._data:
             return self._data['retailNmEn']
 
     @property
-    def retail_location_id(self) -> Union[str | None]:
+    def retail_location_id(self) -> Optional[str]:
         if 'retailLocationId' in self._data:
             return self._data['retailLocationId']
 
@@ -115,7 +115,7 @@ class CPostDetails:
         return events
 
     @property
-    def delivery_date(self) -> Union[date | None]:
+    def delivery_date(self) -> Optional[date]:
         if 'actualDlvryDate' in self._data:
             return date.fromisoformat(self._data['actualDlvryDate'])
 
@@ -132,7 +132,7 @@ class CPostDetails:
     def expected_delivery_date(self) -> date:
         return date.fromisoformat(self._data['expectedDlvryDateTime']['dlvryDate'])
 
-async def request_details(pin: int, proxies: Union[dict | None] = None) -> CPostDetails:
+async def request_details(pin: int, proxies: Optional[dict] = None) -> CPostDetails:
     response: requests.Response = await trio.to_thread.run_sync(functools.partial(requests.get,
         url=f'https://www.canadapost-postescanada.ca/track-reperage/rs/track/json/package/{pin}/detail',
         proxies=proxies
